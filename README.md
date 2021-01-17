@@ -8,7 +8,7 @@ great hassle-free DISTRHO Plugin Framework
 
 Also required:
 
-* CEF binaries: https://cef-builds.spotifycdn.com
+* CEF binaries: https://cef-builds.spotifycdn.com/index.html
 * CEF Makefile: https://github.com/lucianoiam/cef-boilerplate
 * Patched DPF Makefile to allow building plugins outside the DPF directory,
   PR pending: https://github.com/lucianoiam/DPF/tree/makefile_paths
