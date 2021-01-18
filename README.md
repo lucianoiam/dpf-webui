@@ -1,4 +1,5 @@
 Very rough code for embedding a CEF web view in a DPF plugin
+------------------------------------------------------------
 
 Goal is to develop multiplatform audio plugins with web-based UIs based on the
 great hassle-free DISTRHO Plugin Framework
@@ -6,12 +7,14 @@ great hassle-free DISTRHO Plugin Framework
 * DPF project page: https://github.com/DISTRHO/DPF
 * CEF project page: https://bitbucket.org/chromiumembedded/cef/
 
-Also required:
+Depends on:
 
-* CEF binaries: https://cef-builds.spotifycdn.com/index.html
+* DPF develop branch: https://github.com/DISTRHO/DPF/tree/develop
 * CEF Makefile: https://github.com/lucianoiam/cef-boilerplate
-* Patched DPF Makefile to allow building plugins outside the DPF directory,
-  PR pending: https://github.com/lucianoiam/DPF/tree/makefile_paths
+* CEF binaries: https://cef-builds.spotifycdn.com/index.html
+
+First step is running make on DPF and cef-boilerplate to build required static
+libraries
 
 For now all CEF binaries and resource files need to be linked into the host
 binary path, otherwise CRASH
