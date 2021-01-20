@@ -29,8 +29,14 @@ public:
     WebviewExampleUI()
         : UI(800, 600)
     {
-        auto web_engine = new WebEngineThread(getParentWindow().getWindowId());
-        web_engine->startThread();
+        // This is just a proof of concept, lifecycle of this needs work
+        
+        auto engine = new WebEngineThread(getParentWindow().getWindowId());
+        engine->startThread();
+
+        // Also some hosts like REAPER recreate the parent window every time
+        // the plugin UI is opened, we might let CEF create its own window
+        // then reparent as needed -- possibly in onDisplay() ?
     }
 
     ~WebviewExampleUI()
@@ -39,6 +45,7 @@ public:
 
     void onDisplay()
     {
+        // TODO
     }
 
     void parameterChanged(uint32_t index, float value)
