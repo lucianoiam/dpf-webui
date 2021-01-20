@@ -9,18 +9,15 @@ DPF_CUSTOM_TARGET_DIR = bin
 DPF_CUSTOM_BUILD_DIR = build
 
 # --------------------------------------------------------------
-# Include Chromium Embedded Framework target
-
-# https://cef-builds.spotifycdn.com
-CEF_PATH=/opt/cef_binary_87.1.13+g481a82a+chromium-87.0.4280.141_linux64_minimal
-CEF_BIN_PATH = $(CEF_PATH)/Release
-CEF_RES_PATH = $(CEF_PATH)/Resources
-
+# Chromium Embedded Framework, see include at the end
 # https://github.com/lucianoiam/cef-boilerplate
+
 CEF_BOILERPLATE_PATH = ../cef-boilerplate
 CEF_TARGET_DIR = $(DPF_CUSTOM_TARGET_DIR)
 CEF_BUILD_DIR = $(DPF_CUSTOM_BUILD_DIR)
-
+CEF_PATH=/opt/cef_binary_87.1.13+g481a82a+chromium-87.0.4280.141_linux64_minimal
+CEF_BIN_PATH = $(CEF_PATH)/Release
+CEF_RES_PATH = $(CEF_PATH)/Resources
 CEF_CXX = c++
 CEF_CPPFLAGS = -I$(CEF_PATH)
 CEF_CXXFLAGS = -DCEF_USE_SANDBOX -DNDEBUG -DWRAPPING_CEF_SHARED -D_FILE_OFFSET_BITS=64 -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -O3 -DNDEBUG -fno-strict-aliasing -fPIC -fstack-protector -funwind-tables -fvisibility=hidden --param=ssp-buffer-size=4 -pipe -pthread -Wall -Werror -Wno-missing-field-initializers -Wno-unused-parameter -Wno-error=comment -Wno-comment -m64 -march=x86-64 -fno-exceptions -fno-rtti -fno-threadsafe-statics -fvisibility-inlines-hidden -std=gnu++11 -Wsign-compare -Wno-undefined-var-template -Wno-literal-suffix -Wno-narrowing -Wno-attributes -O2 -fdata-sections -ffunction-sections -fno-ident -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2
@@ -49,7 +46,8 @@ FILES_UI  = \
 UI_TYPE = cairo
 include $(DPF_CUSTOM_PATH)/Makefile.plugins.mk
 
-BUILD_CXX_FLAGS += $(CEF_CPPFLAGS)
+BASE_FLAGS += $(CEF_CPPFLAGS)
+BASE_FLAGS += -Wno-unused-parameter 	# CEF headers throw a lot of these
 LDFLAGS += $(CEF_LDFLAGS)
 TARGETS += libcef_dll_wrapper
 

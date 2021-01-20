@@ -16,6 +16,7 @@
 
 #include "WebEngineMain.hpp"
 #include "WebEngineHandler.hpp"
+#include "DistrhoPluginInfo.h"
 
 #include <string>
 
@@ -38,6 +39,7 @@ void WebEngineMain::OnContextInitialized() {
     // Specify CEF browser settings here.
     CefBrowserSettings browser_settings;
 
+    // TODO - load content from disk
     std::string url = "https://distrho.sourceforge.io/";
 
     // Information used when creating the native window.
@@ -46,7 +48,7 @@ void WebEngineMain::OnContextInitialized() {
 #if defined(OS_WIN)
     // On Windows we need to specify certain flags that will be passed to
     // CreateWindowEx().
-    window_info.SetAsPopup(NULL, "cefsimple");
+    window_info.SetAsPopup(NULL, DISTRHO_PLUGIN_NAME);
 #endif
 
     window_info.parent_window = mParentWindowId;
