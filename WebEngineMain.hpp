@@ -2,9 +2,6 @@
  * dpf-webview
  * Copyright (C) 2021 Luciano Iam <lucianoiam@protonmail.com>
  *
- * DISTRHO Plugin Framework (DPF)
- * Copyright (C) 2012-2019 Filipe Coelho <falktx@falktx.com>
- *
  * Permission to use, copy, modify, and/or distribute this software for any purpose with
  * or without fee is hereby granted, provided that the above copyright notice and this
  * permission notice appear in all copies.
@@ -17,42 +14,34 @@
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+#ifndef WEB_ENGINE_MAIN_HPP
+#define WEB_ENGINE_MAIN_HPP
+
 #include "DistrhoUI.hpp"
-#include "Window.hpp"
-#include "WebEngineThread.hpp"
+#include "include/cef_app.h"
 
 START_NAMESPACE_DISTRHO
 
-class WebviewExampleUI : public UI
-{
+// Implement application-level callbacks for the browser process.
+class WebEngineMain : public CefApp, public CefBrowserProcessHandler {
 public:
-    WebviewExampleUI()
-        : UI(800, 600)
-    {
-        auto web_engine = new WebEngineThread(getParentWindow().getWindowId());
-        web_engine->startThread();
+    WebEngineMain(uintptr_t parentWindowId);
+
+    // CefApp methods:
+    virtual CefRefPtr<CefBrowserProcessHandler> GetBrowserProcessHandler() OVERRIDE {
+        return this;
     }
 
-    ~WebviewExampleUI()
-    {
-    }
+    // CefBrowserProcessHandler methods:
+    virtual void OnContextInitialized() OVERRIDE;
 
-    void onDisplay()
-    {
-    }
+private:
+    uintptr_t mParentWindowId;
 
-    void parameterChanged(uint32_t index, float value)
-    {
-        // unused
-        (void)index;
-        (void)value;
-    }
-
+    // Include the default reference counting implementation.
+    IMPLEMENT_REFCOUNTING(WebEngineMain);
 };
 
-UI* createUI()
-{
-    return new WebviewExampleUI;
-}
-
 END_NAMESPACE_DISTRHO
+
+#endif  // WEB_ENGINE_MAIN_HPP

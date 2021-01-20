@@ -1,6 +1,5 @@
 /*
- * DISTRHO Plugin Framework (DPF)
- * Copyright (C) 2012-2019 Filipe Coelho <falktx@falktx.com>
+ * dpf-webview
  * Copyright (C) 2021 Luciano Iam <lucianoiam@protonmail.com>
  *
  * Permission to use, copy, modify, and/or distribute this software for any purpose with
@@ -14,6 +13,9 @@
  * IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
+
+#ifndef WEB_ENGINE_THREAD_HPP
+#define WEB_ENGINE_THREAD_HPP
 
 #include "extra/Thread.hpp"
 
@@ -32,3 +34,5 @@ private:
 };
 
 END_NAMESPACE_DISTRHO
+
+#endif // WEB_ENGINE_THREAD_HPP
