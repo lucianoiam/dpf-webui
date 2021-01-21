@@ -46,8 +46,8 @@ void WebEngineThread::run() {
 
     settings.no_sandbox = true;
 
-    CefString(&settings.browser_subprocess_path).FromASCII("/home/user/src/cef-boilerplate/bin/simple");
-    CefString(&settings.resources_dir_path).FromASCII("/opt/cef_binary_87.1.13+g481a82a+chromium-87.0.4280.141_linux64_minimal/Resources");
+    CefString(&settings.browser_subprocess_path).FromASCII("/home/user/src/dpf-webview/lib/cef/build/tests/cefsimple/Release/cefsimple");
+    CefString(&settings.resources_dir_path).FromASCII("/home/user/src/dpf-webview/lib/cef/Resources");
 
     // WebEngineMain implements application-level callbacks for the browser process.
     // It will create the first browser instance in OnContextInitialized() after
