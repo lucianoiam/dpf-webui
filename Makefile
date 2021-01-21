@@ -4,7 +4,7 @@
 # Created by falkTX
 # CEF support by lucianoiam
 
-DPF_CUSTOM_PATH = ../DPF
+DPF_CUSTOM_PATH = lib/dpf
 DPF_CUSTOM_TARGET_DIR = bin
 DPF_CUSTOM_BUILD_DIR = build
 

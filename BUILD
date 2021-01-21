@@ -1,11 +1,11 @@
 Dependencies:
 
-* DPF develop branch: https://github.com/DISTRHO/DPF/tree/develop
+* DPF develop branch, already linked as a git submodule
 * CEF Makefile: https://github.com/lucianoiam/cef-boilerplate
 * CEF binaries: https://cef-builds.spotifycdn.com/index.html
 
 
-First step is running `make dgl` on DPF and `make libcef_dll_wrapper`
+First step is running `make dgl` on lib/dpf and `make libcef_dll_wrapper`
 on cef-boilerplate to build required static libraries
 
 CEF spawns some helper processes; until a specialized target is developed
