@@ -1,5 +1,5 @@
 /*
- * dpf-webview
+ * dpf-webui
  * Copyright (C) 2021 Luciano Iam <lucianoiam@protonmail.com>
  *
  * DISTRHO Plugin Framework (DPF)
@@ -21,17 +21,17 @@
 
 START_NAMESPACE_DISTRHO
 
-class WebviewExamplePlugin : public Plugin
+class WebExamplePlugin : public Plugin
 {
 public:
-    WebviewExamplePlugin()
+    WebExamplePlugin()
         : Plugin(0, 0, 0)
     {
     }
 
     const char* getLabel() const
     {
-        return "Web View Example";
+        return "Web UI Example";
     }
 
     const char* getMaker() const
@@ -84,7 +84,7 @@ public:
 
 Plugin* createPlugin()
 {
-    return new WebviewExamplePlugin;
+    return new WebExamplePlugin;
 }
 
 END_NAMESPACE_DISTRHO

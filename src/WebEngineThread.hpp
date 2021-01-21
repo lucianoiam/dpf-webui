@@ -1,5 +1,5 @@
 /*
- * dpf-webview
+ * dpf-webui
  * Copyright (C) 2021 Luciano Iam <lucianoiam@protonmail.com>
  *
  * Permission to use, copy, modify, and/or distribute this software for any purpose with

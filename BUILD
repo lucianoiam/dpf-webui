@@ -15,7 +15,7 @@ First step is building the dependencies:
 - DPF graphics library: cd lib/dpf && make dgl
 - CEF, requires CMake: cd lib/cef && mkdir build && cd build && cmake .. && make
 
-Then build dpf-webview: make
+Then build dpf-webui: make
 
 For now all CEF binaries and resource files need to be linked into the host
 binary path, otherwise CRASH. The Makefile already does so for the standalone

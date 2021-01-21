@@ -19,7 +19,7 @@
    This is used to identify your plugin before a Plugin instance can be created.
    @note This macro is required.
  */
-#define DISTRHO_PLUGIN_NAME "Web View Example"
+#define DISTRHO_PLUGIN_NAME "Web UI Example"
 
 /**
    Number of audio inputs the plugin has.
@@ -37,7 +37,7 @@
    The plugin URI when exporting in LV2 format.
    @note This macro is required.
  */
-#define DISTRHO_PLUGIN_URI "http://dpf.local/dpf_webview"
+#define DISTRHO_PLUGIN_URI "https://github.com/lucianoiam/dpf-webui"
 
 /**
    Wherever the plugin has a custom %UI.

@@ -1,5 +1,5 @@
 /*
- * dpf-webview
+ * dpf-webui
  * Copyright (C) 2021 Luciano Iam <lucianoiam@protonmail.com>
  *
  * DISTRHO Plugin Framework (DPF)
@@ -23,10 +23,10 @@
 
 START_NAMESPACE_DISTRHO
 
-class WebviewExampleUI : public UI
+class WebExampleUI : public UI
 {
 public:
-    WebviewExampleUI()
+    WebExampleUI()
         : UI(800, 600)
     {
         // This is just a proof of concept, lifecycle of this needs work
@@ -39,7 +39,7 @@ public:
         // then reparent as needed -- possibly in onDisplay() ?
     }
 
-    ~WebviewExampleUI()
+    ~WebExampleUI()
     {
     }
 
@@ -59,7 +59,7 @@ public:
 
 UI* createUI()
 {
-    return new WebviewExampleUI;
+    return new WebExampleUI;
 }
 
 END_NAMESPACE_DISTRHO

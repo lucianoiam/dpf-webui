@@ -2,7 +2,7 @@
 # Makefile for DISTRHO Plugins #
 # ---------------------------- #
 # Created by falkTX
-# Web view example by lucianoiam
+# Web UI example by lucianoiam
 
 DPF_CUSTOM_PATH = lib/dpf
 DPF_CUSTOM_TARGET_DIR = bin
@@ -12,16 +12,16 @@ CEF_PATH = lib/cef
 # --------------------------------------------------------------
 # DISTRHO project name, used for binaries
 
-NAME = d_dpf_webview
+NAME = d_dpf_webui
 
 # --------------------------------------------------------------
 # Files to build
 
 SRC_FILES_DSP = \
-	WebViewPlugin.cpp
+	WebPlugin.cpp
 
 SRC_FILES_UI  = \
-	WebViewUI.cpp \
+	WebUI.cpp \
 	WebEngineThread.cpp \
 	WebEngineMain.cpp \
 	WebEngineHandler.cpp
