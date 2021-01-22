@@ -9,6 +9,9 @@ DPF_CUSTOM_TARGET_DIR = bin
 DPF_CUSTOM_BUILD_DIR = build
 CEF_PATH = lib/cef
 
+# Keep debug symbols (DPF Makefile.base.mk@148)
+SKIP_STRIPPING = true
+
 # --------------------------------------------------------------
 # DISTRHO project name, used for binaries
 
