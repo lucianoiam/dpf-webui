@@ -48,6 +48,7 @@ void CefMessageThread::run()
     CefSettings settings;
 
     settings.no_sandbox = true;
+    settings.log_severity = LOGSEVERITY_DEBUG;
 
     CefString(&settings.browser_subprocess_path).FromASCII("/home/user/src/dpf-webui/lib/cef/build/tests/cefsimple/Release/cefsimple");
     CefString(&settings.resources_dir_path).FromASCII("/home/user/src/dpf-webui/lib/cef/Resources");
