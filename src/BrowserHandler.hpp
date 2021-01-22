@@ -31,8 +31,10 @@ public:
     explicit BrowserHandler();
     ~BrowserHandler();
 
-    // Provide access to the single global instance of this object.
-    static BrowserHandler* GetInstance();
+    CefRefPtr<CefBrowser> getBrowserInstance()
+    {
+        return mBrowserInstance;
+    }
 
     // CefClient methods:
     virtual CefRefPtr<CefDisplayHandler> GetDisplayHandler() OVERRIDE
@@ -62,11 +64,11 @@ public:
                                ErrorCode errorCode,
                                const CefString& errorText,
                                const CefString& failedUrl) OVERRIDE;
+    
+private:
 
     // Existing browser windows. Only accessed on the CEF UI thread.
     CefRefPtr<CefBrowser> mBrowserInstance;
-    
-private:
 
     // Include the default reference counting implementation.
     IMPLEMENT_REFCOUNTING(BrowserHandler);

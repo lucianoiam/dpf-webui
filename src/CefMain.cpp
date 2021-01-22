@@ -15,7 +15,6 @@
  */
 
 #include "CefMain.hpp"
-#include "BrowserHandler.hpp"
 #include "DistrhoPluginInfo.h"
 
 #include <string>
@@ -35,7 +34,7 @@ void CefMain::OnContextInitialized()
     CEF_REQUIRE_UI_THREAD();
 
     // BrowserHandler implements browser-level callbacks.
-    CefRefPtr<BrowserHandler> handler(new BrowserHandler());
+    mBrowserHandler = new BrowserHandler();
 
     // Specify CEF browser settings here.
     CefBrowserSettings browser_settings;
@@ -56,6 +55,6 @@ void CefMain::OnContextInitialized()
     window_info.parent_window = mParentWindowId;
 
     // Create the browser window.
-    CefBrowserHost::CreateBrowser(window_info, handler, url, browser_settings,
+    CefBrowserHost::CreateBrowser(window_info, mBrowserHandler, url, browser_settings,
                                 nullptr, nullptr);
 }

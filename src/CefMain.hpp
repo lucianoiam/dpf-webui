@@ -20,6 +20,8 @@
 #include "DistrhoUI.hpp"
 #include "include/cef_app.h"
 
+#include "BrowserHandler.hpp"
+
 START_NAMESPACE_DISTRHO
 
 // Implement application-level callbacks for the browser process.
@@ -27,6 +29,11 @@ class CefMain : public CefApp, public CefBrowserProcessHandler
 {
 public:
     CefMain(uintptr_t parentWindowId);
+
+    CefRefPtr<BrowserHandler> getBrowserHandler()
+    {
+        return mBrowserHandler;
+    }
 
     // CefApp methods:
     virtual CefRefPtr<CefBrowserProcessHandler> GetBrowserProcessHandler() OVERRIDE
@@ -38,6 +45,8 @@ public:
     virtual void OnContextInitialized() OVERRIDE;
 
 private:
+    CefRefPtr<BrowserHandler> mBrowserHandler;
+
     uintptr_t mParentWindowId;
 
     // Include the default reference counting implementation.

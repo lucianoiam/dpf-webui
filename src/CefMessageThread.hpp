@@ -18,6 +18,7 @@
 #define CEF_MESSAGE_THREAD_HPP
 
 #include "extra/Thread.hpp"
+#include "CefMain.hpp"
 
 START_NAMESPACE_DISTRHO
 
@@ -28,12 +29,16 @@ public:
 
     void run() override;
 
+    void closeBrowser();
+
     void setParentWindowId(uintptr_t parentWindowId)
     {
     	mParentWindowId = parentWindowId;
     }
 
 private:
+	CefRefPtr<CefMain> mMain;
+
 	uintptr_t mParentWindowId;
 
 };

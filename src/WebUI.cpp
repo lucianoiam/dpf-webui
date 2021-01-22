@@ -47,9 +47,7 @@ public:
         // tell the browser to close. That will in turn call CefQuitMessageLoop()
         // effectively ending the CefMessageThread
         // https://bitbucket.org/chromiumembedded/cef/wiki/GeneralUsage#markdown-header-browser-life-span
-        
-        // TO DO - looks horrible but works, refactor
-        BrowserHandler::GetInstance()->mBrowserInstance->GetHost()->CloseBrowser(false);
+        mCefThread.closeBrowser();
 
         // Wait until CefQuitMessageLoop() is called
         mCefThread.stopThread(1000);

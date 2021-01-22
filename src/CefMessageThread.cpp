@@ -15,7 +15,6 @@
  */
 
 #include "CefMessageThread.hpp"
-#include "CefMain.hpp"
 
 #include <iostream>
 
@@ -48,7 +47,7 @@ void CefMessageThread::run()
     CefSettings settings;
 
     settings.no_sandbox = true;
-    settings.log_severity = LOGSEVERITY_DEBUG;
+    //settings.log_severity = LOGSEVERITY_DEBUG;
 
     CefString(&settings.browser_subprocess_path).FromASCII("/home/user/src/dpf-webui/lib/cef/build/tests/cefsimple/Release/cefsimple");
     CefString(&settings.resources_dir_path).FromASCII("/home/user/src/dpf-webui/lib/cef/Resources");
@@ -56,10 +55,10 @@ void CefMessageThread::run()
     // CefMain implements application-level callbacks for the browser process.
     // It will create the first browser instance in OnContextInitialized() after
     // CEF has initialized.
-    CefRefPtr<CefMain> app(new CefMain(mParentWindowId));
+    mMain = new CefMain(mParentWindowId);
 
     // Initialize CEF for the browser process.
-    CefInitialize(CefMainArgs(), settings, app.get(), nullptr);
+    CefInitialize(CefMainArgs(), settings, mMain.get(), nullptr);
 
     std::cout << "Running CEF message loop..." << std::endl;
 
@@ -71,4 +70,9 @@ void CefMessageThread::run()
 
     // Shut down CEF.
     CefShutdown();
+}
+
+void CefMessageThread::closeBrowser()
+{
+    mMain->getBrowserHandler()->getBrowserInstance()->GetHost()->CloseBrowser(false);
 }

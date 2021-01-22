@@ -23,23 +23,12 @@
 
 USE_NAMESPACE_DISTRHO
 
-BrowserHandler* g_instance = nullptr;
-
 BrowserHandler::BrowserHandler()
 {
-    DCHECK(!g_instance);
-    g_instance = this;
 }
 
 BrowserHandler::~BrowserHandler()
 {
-    g_instance = nullptr;
-}
-
-// static
-BrowserHandler* BrowserHandler::GetInstance()
-{
-    return g_instance;
 }
 
 bool BrowserHandler::OnBeforePopup(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, const CefString& target_url, const CefString& target_frame_name, CefLifeSpanHandler::WindowOpenDisposition target_disposition, bool user_gesture, const CefPopupFeatures& popupFeatures, CefWindowInfo& windowInfo, CefRefPtr<CefClient>& client, CefBrowserSettings& settings, CefRefPtr<CefDictionaryValue>& extra_info, bool* no_javascript_access)
