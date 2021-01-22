@@ -19,28 +19,40 @@
 
 #include "DistrhoUI.hpp"
 #include "Window.hpp"
-#include "WebEngineThread.hpp"
+#include "CefMessageThread.hpp"
+
+#include "BrowserHandler.hpp"
 
 START_NAMESPACE_DISTRHO
 
-class WebExampleUI : public UI
+class WebUI : public UI
 {
 public:
-    WebExampleUI()
+    WebUI()
         : UI(800, 600)
     {
         // This is just a proof of concept, lifecycle of this needs work
         
-        auto engine = new WebEngineThread(getParentWindow().getWindowId());
-        engine->startThread();
+        mCefThread.setParentWindowId(getParentWindow().getWindowId());
+        mCefThread.startThread();
 
         // Also some hosts like REAPER recreate the parent window every time
         // the plugin UI is opened, we might let CEF create its own window
         // then reparent as needed -- possibly in onDisplay() ?
     }
 
-    ~WebExampleUI()
+    ~WebUI()
     {
+        // Since the CEF window is a child of the DPF window, need to explicity
+        // tell the browser to close. That will in turn call CefQuitMessageLoop()
+        // effectively ending the CefMessageThread
+        // https://bitbucket.org/chromiumembedded/cef/wiki/GeneralUsage#markdown-header-browser-life-span
+        
+        // TO DO - looks horrible but works, refactor
+        BrowserHandler::GetInstance()->mBrowserInstance->GetHost()->CloseBrowser(false);
+
+        // Wait until CefQuitMessageLoop() is called
+        mCefThread.stopThread(1000);
     }
 
     void onDisplay()
@@ -55,11 +67,13 @@ public:
         (void)value;
     }
 
+private:
+    CefMessageThread mCefThread;
 };
 
 UI* createUI()
 {
-    return new WebExampleUI;
+    return new WebUI;
 }
 
 END_NAMESPACE_DISTRHO

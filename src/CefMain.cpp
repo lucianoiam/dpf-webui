@@ -14,8 +14,8 @@
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include "WebEngineMain.hpp"
-#include "WebEngineHandler.hpp"
+#include "CefMain.hpp"
+#include "BrowserHandler.hpp"
 #include "DistrhoPluginInfo.h"
 
 #include <string>
@@ -25,16 +25,17 @@
 
 USE_NAMESPACE_DISTRHO
 
-WebEngineMain::WebEngineMain(uintptr_t parentWindowId)
+CefMain::CefMain(uintptr_t parentWindowId)
   : mParentWindowId(parentWindowId)
 {
 }
 
-void WebEngineMain::OnContextInitialized() {
+void CefMain::OnContextInitialized()
+{
     CEF_REQUIRE_UI_THREAD();
 
-    // WebEngineHandler implements browser-level callbacks.
-    CefRefPtr<WebEngineHandler> handler(new WebEngineHandler());
+    // BrowserHandler implements browser-level callbacks.
+    CefRefPtr<BrowserHandler> handler(new BrowserHandler());
 
     // Specify CEF browser settings here.
     CefBrowserSettings browser_settings;
@@ -51,6 +52,7 @@ void WebEngineMain::OnContextInitialized() {
     window_info.SetAsPopup(NULL, DISTRHO_PLUGIN_NAME);
 #endif
 
+    // TO DO
     window_info.parent_window = mParentWindowId;
 
     // Create the browser window.

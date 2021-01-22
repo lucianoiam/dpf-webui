@@ -14,35 +14,39 @@
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#ifndef WEB_ENGINE_HANDLER_HPP
-#define WEB_ENGINE_HANDLER_HPP
+#ifndef BROWSER_HANDLER_HPP
+#define BROWSER_HANDLER_HPP
 
 #include "DistrhoUI.hpp"
 #include "include/cef_client.h"
 
 START_NAMESPACE_DISTRHO
 
-class WebEngineHandler : public CefClient,
+class BrowserHandler : public CefClient,
                             public CefDisplayHandler,
                             public CefLifeSpanHandler,
-                            public CefLoadHandler {
+                            public CefLoadHandler
+{
 public:
-    explicit WebEngineHandler();
-    ~WebEngineHandler();
+    explicit BrowserHandler();
+    ~BrowserHandler();
 
     // Provide access to the single global instance of this object.
-    static WebEngineHandler* GetInstance();
+    static BrowserHandler* GetInstance();
 
     // CefClient methods:
-    virtual CefRefPtr<CefDisplayHandler> GetDisplayHandler() OVERRIDE {
+    virtual CefRefPtr<CefDisplayHandler> GetDisplayHandler() OVERRIDE
+    {
         return this;
     }
     
-    virtual CefRefPtr<CefLifeSpanHandler> GetLifeSpanHandler() OVERRIDE {
+    virtual CefRefPtr<CefLifeSpanHandler> GetLifeSpanHandler() OVERRIDE
+    {
         return this;
     }
     
-    virtual CefRefPtr<CefLoadHandler> GetLoadHandler() OVERRIDE {
+    virtual CefRefPtr<CefLoadHandler> GetLoadHandler() OVERRIDE
+    {
         return this;
     }
 
@@ -59,15 +63,15 @@ public:
                                const CefString& errorText,
                                const CefString& failedUrl) OVERRIDE;
 
-private:
-
     // Existing browser windows. Only accessed on the CEF UI thread.
     CefRefPtr<CefBrowser> mBrowserInstance;
+    
+private:
 
     // Include the default reference counting implementation.
-    IMPLEMENT_REFCOUNTING(WebEngineHandler);
+    IMPLEMENT_REFCOUNTING(BrowserHandler);
 };
 
 END_NAMESPACE_DISTRHO
 
-#endif  // WEB_ENGINE_HANDLER_HPP
+#endif  // BROWSER_HANDLER_HPP

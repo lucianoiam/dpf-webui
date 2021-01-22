@@ -22,9 +22,9 @@ SRC_FILES_DSP = \
 
 SRC_FILES_UI  = \
 	WebUI.cpp \
-	WebEngineThread.cpp \
-	WebEngineMain.cpp \
-	WebEngineHandler.cpp
+	CefMain.cpp \
+	CefMessageThread.cpp \
+	BrowserHandler.cpp
 
 FILES_DSP = $(SRC_FILES_DSP:%=src/%)
 FILES_UI = $(SRC_FILES_UI:%=src/%)

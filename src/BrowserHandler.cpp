@@ -14,7 +14,7 @@
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include "WebEngineHandler.hpp"
+#include "BrowserHandler.hpp"
 
 #include <iostream>
 
@@ -23,37 +23,47 @@
 
 USE_NAMESPACE_DISTRHO
 
-WebEngineHandler* g_instance = nullptr;
+BrowserHandler* g_instance = nullptr;
 
-WebEngineHandler::WebEngineHandler() {
+BrowserHandler::BrowserHandler()
+{
     DCHECK(!g_instance);
     g_instance = this;
 }
 
-WebEngineHandler::~WebEngineHandler() {
+BrowserHandler::~BrowserHandler()
+{
     g_instance = nullptr;
 }
 
 // static
-WebEngineHandler* WebEngineHandler::GetInstance() {
+BrowserHandler* BrowserHandler::GetInstance()
+{
     return g_instance;
 }
 
-bool WebEngineHandler::OnBeforePopup(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, const CefString& target_url, const CefString& target_frame_name, CefLifeSpanHandler::WindowOpenDisposition target_disposition, bool user_gesture, const CefPopupFeatures& popupFeatures, CefWindowInfo& windowInfo, CefRefPtr<CefClient>& client, CefBrowserSettings& settings, CefRefPtr<CefDictionaryValue>& extra_info, bool* no_javascript_access) {
+bool BrowserHandler::OnBeforePopup(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, const CefString& target_url, const CefString& target_frame_name, CefLifeSpanHandler::WindowOpenDisposition target_disposition, bool user_gesture, const CefPopupFeatures& popupFeatures, CefWindowInfo& windowInfo, CefRefPtr<CefClient>& client, CefBrowserSettings& settings, CefRefPtr<CefDictionaryValue>& extra_info, bool* no_javascript_access)
+{
     CEF_REQUIRE_UI_THREAD();
+    
+    std::cout << "BrowserHandler::OnBeforePopup()" << std::endl;
 
     // Disable popups, only the main browser is allowed
     return true;
 }
 
-void WebEngineHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser) {
+void BrowserHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser)
+{
     CEF_REQUIRE_UI_THREAD();
+
+    std::cout << "BrowserHandler::OnAfterCreated()" << std::endl;
 
     // Keep browser.
     mBrowserInstance = browser;
 }
 
-bool WebEngineHandler::DoClose(CefRefPtr<CefBrowser> browser) {
+bool BrowserHandler::DoClose(CefRefPtr<CefBrowser> browser)
+{
     CEF_REQUIRE_UI_THREAD();
 
     // Closing the main window requires special handling. See the DoClose()
@@ -62,11 +72,17 @@ bool WebEngineHandler::DoClose(CefRefPtr<CefBrowser> browser) {
 
     // Allow the close. For windowed browsers this will result in the OS close
     // event being sent.
+
+    std::cout << "BrowserHandler::DoClose()" << std::endl;
+
     return false;
 }
 
-void WebEngineHandler::OnBeforeClose(CefRefPtr<CefBrowser> browser) {
+void BrowserHandler::OnBeforeClose(CefRefPtr<CefBrowser> browser)
+{
     CEF_REQUIRE_UI_THREAD();
+
+    std::cout << "BrowserHandler::OnBeforeClose()" << std::endl;
 
     // All browser windows have closed. Quit the application message loop.
     CefQuitMessageLoop();
@@ -74,12 +90,13 @@ void WebEngineHandler::OnBeforeClose(CefRefPtr<CefBrowser> browser) {
     mBrowserInstance = nullptr;
 }
 
-void WebEngineHandler::OnLoadError(CefRefPtr<CefBrowser> browser,
+void BrowserHandler::OnLoadError(CefRefPtr<CefBrowser> browser,
                                     CefRefPtr<CefFrame> frame,
                                     ErrorCode errorCode,
                                     const CefString& errorText,
-                                    const CefString& failedUrl) {
+                                    const CefString& failedUrl)
+{
     CEF_REQUIRE_UI_THREAD();
 
-    std::cout << errorText << std::endl;
+    std::cout << "BrowserHandler::OnLoadError() " << errorText << std::endl;
 }

@@ -21,10 +21,10 @@
 
 START_NAMESPACE_DISTRHO
 
-class WebExamplePlugin : public Plugin
+class WebPlugin : public Plugin
 {
 public:
-    WebExamplePlugin()
+    WebPlugin()
         : Plugin(0, 0, 0)
     {
     }
@@ -84,7 +84,7 @@ public:
 
 Plugin* createPlugin()
 {
-    return new WebExamplePlugin;
+    return new WebPlugin;
 }
 
 END_NAMESPACE_DISTRHO

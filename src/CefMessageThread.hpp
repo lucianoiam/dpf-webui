@@ -14,19 +14,24 @@
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#ifndef WEB_ENGINE_THREAD_HPP
-#define WEB_ENGINE_THREAD_HPP
+#ifndef CEF_MESSAGE_THREAD_HPP
+#define CEF_MESSAGE_THREAD_HPP
 
 #include "extra/Thread.hpp"
 
 START_NAMESPACE_DISTRHO
 
-class WebEngineThread : public Thread
+class CefMessageThread : public Thread
 {
 public:
-    WebEngineThread(uintptr_t parentWindowId);
+    CefMessageThread();
 
     void run() override;
+
+    void setParentWindowId(uintptr_t parentWindowId)
+    {
+    	mParentWindowId = parentWindowId;
+    }
 
 private:
 	uintptr_t mParentWindowId;
@@ -35,4 +40,4 @@ private:
 
 END_NAMESPACE_DISTRHO
 
-#endif // WEB_ENGINE_THREAD_HPP
+#endif // CEF_MESSAGE_THREAD_HPP

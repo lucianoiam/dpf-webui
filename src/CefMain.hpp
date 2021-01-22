@@ -14,8 +14,8 @@
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#ifndef WEB_ENGINE_MAIN_HPP
-#define WEB_ENGINE_MAIN_HPP
+#ifndef CEF_MAIN_HPP
+#define CEF_MAIN_HPP
 
 #include "DistrhoUI.hpp"
 #include "include/cef_app.h"
@@ -23,12 +23,14 @@
 START_NAMESPACE_DISTRHO
 
 // Implement application-level callbacks for the browser process.
-class WebEngineMain : public CefApp, public CefBrowserProcessHandler {
+class CefMain : public CefApp, public CefBrowserProcessHandler
+{
 public:
-    WebEngineMain(uintptr_t parentWindowId);
+    CefMain(uintptr_t parentWindowId);
 
     // CefApp methods:
-    virtual CefRefPtr<CefBrowserProcessHandler> GetBrowserProcessHandler() OVERRIDE {
+    virtual CefRefPtr<CefBrowserProcessHandler> GetBrowserProcessHandler() OVERRIDE
+    {
         return this;
     }
 
@@ -39,9 +41,9 @@ private:
     uintptr_t mParentWindowId;
 
     // Include the default reference counting implementation.
-    IMPLEMENT_REFCOUNTING(WebEngineMain);
+    IMPLEMENT_REFCOUNTING(CefMain);
 };
 
 END_NAMESPACE_DISTRHO
 
-#endif  // WEB_ENGINE_MAIN_HPP
+#endif  // CEF_MAIN_HPP
