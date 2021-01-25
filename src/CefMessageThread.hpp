@@ -29,17 +29,12 @@ public:
 
     void run() override;
 
-    void closeBrowser();
+    void createBrowser(uintptr_t parentWindowId);
 
-    void setParentWindowId(uintptr_t parentWindowId)
-    {
-    	mParentWindowId = parentWindowId;
-    }
+    //void closeBrowser();
 
 private:
 	CefRefPtr<CefMain> mMain;
-
-	uintptr_t mParentWindowId;
 
 };
 

@@ -32,9 +32,16 @@ public:
         : UI(800, 600)
     {
         // This is just a proof of concept, lifecycle of this needs work
-        
-        mCefThread.setParentWindowId(getParentWindow().getWindowId());
-        mCefThread.startThread();
+
+        if (mInstanceCount++ == 0) {
+            sCefSharedThread.startThread();
+        }
+
+        sleep(1);   // FIXME -- queue createBrowser() requests
+        sCefSharedThread.createBrowser(getParentWindow().getWindowId());
+
+        //mCefThread.setParentWindowId(getParentWindow().getWindowId());
+        //mCefThread.startThread();
 
         // Also some hosts like REAPER recreate the parent window every time
         // the plugin UI is opened, we might let CEF create its own window
@@ -43,14 +50,22 @@ public:
 
     ~WebUI()
     {
+        if (mInstanceCount > 0) {
+            mInstanceCount--;
+        
+            if (mInstanceCount == 0) {
+                sCefSharedThread.stopThread(1000);
+            }
+        }
+
         // Since the CEF window is a child of the DPF window, need to explicity
         // tell the browser to close. That will in turn call CefQuitMessageLoop()
         // effectively ending the CefMessageThread
         // https://bitbucket.org/chromiumembedded/cef/wiki/GeneralUsage#markdown-header-browser-life-span
-        mCefThread.closeBrowser();
+        //mCefThread.closeBrowser();
 
         // Wait until CefQuitMessageLoop() is called
-        mCefThread.stopThread(1000);
+        //mCefThread.stopThread(1000);
     }
 
     void onDisplay()
@@ -66,8 +81,13 @@ public:
     }
 
 private:
-    CefMessageThread mCefThread;
+    static CefMessageThread sCefSharedThread;
+
+    int mInstanceCount;
+
 };
+
+CefMessageThread WebUI::sCefSharedThread;
 
 UI* createUI()
 {

@@ -28,13 +28,15 @@ START_NAMESPACE_DISTRHO
 class CefMain : public CefApp, public CefBrowserProcessHandler
 {
 public:
-    CefMain(uintptr_t parentWindowId);
+    CefMain();
 
     CefRefPtr<BrowserHandler> getBrowserHandler()
     {
         return mBrowserHandler;
     }
 
+    void createBrowser(uintptr_t parentWindowId);
+    
     // CefApp methods:
     virtual CefRefPtr<CefBrowserProcessHandler> GetBrowserProcessHandler() OVERRIDE
     {
@@ -47,7 +49,7 @@ public:
 private:
     CefRefPtr<BrowserHandler> mBrowserHandler;
 
-    uintptr_t mParentWindowId;
+    bool mContextInitialized;
 
     // Include the default reference counting implementation.
     IMPLEMENT_REFCOUNTING(CefMain);

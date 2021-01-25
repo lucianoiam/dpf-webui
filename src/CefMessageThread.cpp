@@ -61,7 +61,7 @@ void CefMessageThread::run()
     // CefMain implements application-level callbacks for the browser process.
     // It will create the first browser instance in OnContextInitialized() after
     // CEF has initialized.
-    mMain = new CefMain(mParentWindowId);
+    mMain = new CefMain();
 
     // Initialize CEF for the browser process.
     CefInitialize(CefMainArgs(), settings, mMain, nullptr);
@@ -81,10 +81,18 @@ void CefMessageThread::run()
     CefShutdown();
 }
 
-void CefMessageThread::closeBrowser()
+void CefMessageThread::createBrowser(uintptr_t parentWindowId)
+{
+    assert(mMain != nullptr);
+
+    mMain->createBrowser(parentWindowId);
+}
+
+/*void CefMessageThread::closeBrowser()
 {
     // TODO -- mBrowserHandler becomes null, check memory mgmt
     if (mMain->getBrowserHandler()) {
         mMain->getBrowserHandler()->getBrowserInstance()->GetHost()->CloseBrowser(false);
     }
 }
+*/

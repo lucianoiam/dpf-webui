@@ -24,17 +24,15 @@
 
 USE_NAMESPACE_DISTRHO
 
-CefMain::CefMain(uintptr_t parentWindowId)
-  : mParentWindowId(parentWindowId)
+CefMain::CefMain()
 {
 }
-
-void CefMain::OnContextInitialized()
+    
+void CefMain::createBrowser(uintptr_t parentWindowId)
 {
     CEF_REQUIRE_UI_THREAD();
 
-    // BrowserHandler implements browser-level callbacks.
-    mBrowserHandler = new BrowserHandler();
+    assert(mContextInitialized == true);
 
     // Specify CEF browser settings here.
     CefBrowserSettings browser_settings;
@@ -52,9 +50,19 @@ void CefMain::OnContextInitialized()
 #endif
 
     // TO DO
-    window_info.parent_window = mParentWindowId;
+    window_info.parent_window = parentWindowId;
 
     // Create the browser window.
     CefBrowserHost::CreateBrowser(window_info, mBrowserHandler, url, browser_settings,
                                 nullptr, nullptr);
+}
+
+void CefMain::OnContextInitialized()
+{
+    CEF_REQUIRE_UI_THREAD();
+
+    // BrowserHandler implements browser-level callbacks.
+    mBrowserHandler = new BrowserHandler();
+
+    mContextInitialized = true;
 }
