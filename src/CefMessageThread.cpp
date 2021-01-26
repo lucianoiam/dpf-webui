@@ -22,14 +22,8 @@
 
 USE_NAMESPACE_DISTRHO
 
-static std::string gen_thread_name()
-{
-    static int thread_index;
-    return "cef_thread_" + thread_index++;
-}
-
 CefMessageThread::CefMessageThread()
-  : Thread(gen_thread_name().c_str())
+  : Thread("shared_cef")
 {
 }
 
@@ -64,15 +58,18 @@ void CefMessageThread::run()
     mMain = new CefMain();
 
     // Initialize CEF for the browser process.
+    // CefInitialize() can only be called once per process
+    // see https://bitbucket.org/chromiumembedded/cef/issues/421
     CefInitialize(CefMainArgs(), settings, mMain, nullptr);
 
-    // TODO: CEF can be initialized once per process... 
-    // https://bitbucket.org/chromiumembedded/cef/issues/421
-
-    std::cout << "Running CEF message loop..." << std::endl;
+    mCefInit = true;
+    mCefInitSignal.signal();
 
     // Run the CEF message loop. This will block until CefQuitMessageLoop() is
     // called.
+
+    std::cout << "Running CEF message loop..." << std::endl;
+
     CefRunMessageLoop();
     
     std::cout << "Quit CEF message loop" << std::endl;
@@ -83,7 +80,9 @@ void CefMessageThread::run()
 
 void CefMessageThread::createBrowser(uintptr_t parentWindowId)
 {
-    assert(mMain != nullptr);
+    if (!mCefInit) {
+        mCefInitSignal.wait();
+    }
 
     mMain->createBrowser(parentWindowId);
 }

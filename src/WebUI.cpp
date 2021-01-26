@@ -31,17 +31,11 @@ public:
     WebUI()
         : UI(800, 600)
     {
-        // This is just a proof of concept, lifecycle of this needs work
-
-        if (mInstanceCount++ == 0) {
-            sCefSharedThread.startThread();
+        if (mInstances++ == 0) {
+            sCefThread.startThread();
         }
 
-        sleep(1);   // FIXME -- queue createBrowser() requests
-        sCefSharedThread.createBrowser(getParentWindow().getWindowId());
-
-        //mCefThread.setParentWindowId(getParentWindow().getWindowId());
-        //mCefThread.startThread();
+        sCefThread.createBrowser(getParentWindow().getWindowId());
 
         // Also some hosts like REAPER recreate the parent window every time
         // the plugin UI is opened, we might let CEF create its own window
@@ -50,11 +44,13 @@ public:
 
     ~WebUI()
     {
-        if (mInstanceCount > 0) {
-            mInstanceCount--;
+        if (mInstances > 0) {
+            mInstances--;
         
-            if (mInstanceCount == 0) {
-                sCefSharedThread.stopThread(1000);
+            if (mInstances == 0) {
+                // TO DO -- cleanup browser but do not shutdown CEF as it cannot
+                //          be re-initialized (insert link)
+                //sCefThread.stopThread(1000);
             }
         }
 
@@ -81,13 +77,13 @@ public:
     }
 
 private:
-    static CefMessageThread sCefSharedThread;
+    static CefMessageThread sCefThread;
 
-    int mInstanceCount;
+    int mInstances;
 
 };
 
-CefMessageThread WebUI::sCefSharedThread;
+CefMessageThread WebUI::sCefThread;
 
 UI* createUI()
 {

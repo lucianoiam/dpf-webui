@@ -18,6 +18,7 @@
 #define CEF_MESSAGE_THREAD_HPP
 
 #include "extra/Thread.hpp"
+#include "extra/Mutex.hpp"
 #include "CefMain.hpp"
 
 START_NAMESPACE_DISTRHO
@@ -34,7 +35,10 @@ public:
     //void closeBrowser();
 
 private:
-	CefRefPtr<CefMain> mMain;
+    CefRefPtr<CefMain> mMain;
+
+    Signal        mCefInitSignal;
+    volatile bool mCefInit;
 
 };
 

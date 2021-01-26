@@ -18,6 +18,7 @@
 #define CEF_MAIN_HPP
 
 #include "DistrhoUI.hpp"
+#include "extra/Mutex.hpp"
 #include "include/cef_app.h"
 
 #include "BrowserHandler.hpp"
@@ -49,7 +50,8 @@ public:
 private:
     CefRefPtr<BrowserHandler> mBrowserHandler;
 
-    bool mContextInitialized;
+    Signal        mCtxReadySignal;
+    volatile bool mCtxReady;
 
     // Include the default reference counting implementation.
     IMPLEMENT_REFCOUNTING(CefMain);

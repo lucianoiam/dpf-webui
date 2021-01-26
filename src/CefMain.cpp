@@ -32,7 +32,9 @@ void CefMain::createBrowser(uintptr_t parentWindowId)
 {
     CEF_REQUIRE_UI_THREAD();
 
-    assert(mContextInitialized == true);
+    if (!mCtxReady) {
+        mCtxReadySignal.wait();
+    }
 
     // Specify CEF browser settings here.
     CefBrowserSettings browser_settings;
@@ -42,15 +44,13 @@ void CefMain::createBrowser(uintptr_t parentWindowId)
 
     // Information used when creating the native window.
     CefWindowInfo window_info;
+    window_info.parent_window = parentWindowId;
 
 #if defined(OS_WIN)
     // On Windows we need to specify certain flags that will be passed to
     // CreateWindowEx().
     window_info.SetAsPopup(NULL, DISTRHO_PLUGIN_NAME);
 #endif
-
-    // TO DO
-    window_info.parent_window = parentWindowId;
 
     // Create the browser window.
     CefBrowserHost::CreateBrowser(window_info, mBrowserHandler, url, browser_settings,
@@ -64,5 +64,6 @@ void CefMain::OnContextInitialized()
     // BrowserHandler implements browser-level callbacks.
     mBrowserHandler = new BrowserHandler();
 
-    mContextInitialized = true;
+    mCtxReady = true;
+    mCtxReadySignal.signal();
 }
