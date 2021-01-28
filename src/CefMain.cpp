@@ -22,17 +22,16 @@
 
 USE_NAMESPACE_DISTRHO
 
-CefMain::CefMain()
+void CefMain::waitForInit()
 {
-}
-    
-void CefMain::createBrowser(uintptr_t parentWindowId)
-{
-    CEF_REQUIRE_UI_THREAD();
-
     if (!mCtxReady) {
         mCtxReadySignal.wait();
     }
+}
+ 
+void CefMain::createBrowser(uintptr_t parentWindowId)
+{
+    CEF_REQUIRE_UI_THREAD();
 
     // Specify CEF browser settings here.
     CefBrowserSettings browser_settings;

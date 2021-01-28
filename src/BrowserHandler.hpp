@@ -28,8 +28,8 @@ class BrowserHandler : public CefClient,
                             public CefLoadHandler
 {
 public:
-    explicit BrowserHandler();
-    ~BrowserHandler();
+    explicit BrowserHandler() {};
+    ~BrowserHandler() {};
 
     CefRefPtr<CefBrowser> getBrowserInstance()
     {
@@ -66,7 +66,6 @@ public:
                                const CefString& failedUrl) OVERRIDE;
     
 private:
-
     // Existing browser windows. Only accessed on the CEF UI thread.
     CefRefPtr<CefBrowser> mBrowserInstance;
 

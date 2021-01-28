@@ -19,7 +19,7 @@
 
 #include "WebUI.hpp"
 #include "Window.hpp"
-#include "CefMessageThread.hpp"
+#include "BrowserFactory.hpp"
 
 #include <syslog.h>
 
@@ -40,14 +40,14 @@ WebUI::WebUI()
 
     // UI and DSP code are completely isolated, pass opaque pointer as the owner
     uintptr_t parentWindowId = getParentWindow().getWindowId();
-    CefMessageThread::getInstance().createBrowser(this, parentWindowId);
+    BrowserFactory::getInstance().createBrowser(this, parentWindowId);
 }
 
 WebUI::~WebUI()
 {
     syslog(LOG_INFO, "%p WebUI::~WebUI()", this);
 
-    CefMessageThread::getInstance().closeBrowser(this);
+    BrowserFactory::getInstance().destroyBrowser(this);
 }
 
 void WebUI::onDisplay()

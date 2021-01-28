@@ -29,12 +29,14 @@ START_NAMESPACE_DISTRHO
 class CefMain : public CefApp, public CefBrowserProcessHandler
 {
 public:
-    CefMain();
+    CefMain() {};
 
     CefRefPtr<BrowserHandler> getBrowserHandler()
     {
         return mBrowserHandler;
     }
+
+    void waitForInit();
 
     void createBrowser(uintptr_t parentWindowId);
     

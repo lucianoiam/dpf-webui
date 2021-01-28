@@ -27,6 +27,7 @@ SRC_FILES_UI  = \
 	WebUI.cpp \
 	CefMain.cpp \
 	CefMessageThread.cpp \
+	BrowserFactory.cpp \
 	BrowserHandler.cpp
 
 FILES_DSP = $(SRC_FILES_DSP:%=src/%)

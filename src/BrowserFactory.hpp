@@ -2,9 +2,6 @@
  * dpf-webui
  * Copyright (C) 2021 Luciano Iam <lucianoiam@protonmail.com>
  *
- * DISTRHO Plugin Framework (DPF)
- * Copyright (C) 2012-2019 Filipe Coelho <falktx@falktx.com>
- *
  * Permission to use, copy, modify, and/or distribute this software for any purpose with
  * or without fee is hereby granted, provided that the above copyright notice and this
  * permission notice appear in all copies.
@@ -17,25 +14,29 @@
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#ifndef WEBUI_HPP
-#define WEBUI_HPP
+#ifndef BROWSER_FACTORY_HPP
+#define BROWSER_FACTORY_HPP
 
-#include "DistrhoUI.hpp"
+#include "CefMessageThread.hpp"
 
 START_NAMESPACE_DISTRHO
 
-class WebUI : public UI
+class BrowserFactory
 {
 public:
-    WebUI();
-    ~WebUI();
+    BrowserFactory();
+    ~BrowserFactory();
 
-    void onDisplay();
+    void createBrowser(void *owner, uintptr_t parentWindowId);
+    void destroyBrowser(void *owner);
 
-    void parameterChanged(uint32_t index, float value);
+    static BrowserFactory& getInstance();
+
+private:
+    CefMessageThread mCefThread;
 
 };
 
 END_NAMESPACE_DISTRHO
 
-#endif  // WEBUI_HPP
+#endif  // BROWSER_FACTORY_HPP

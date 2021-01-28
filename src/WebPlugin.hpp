@@ -27,7 +27,6 @@ START_NAMESPACE_DISTRHO
 class WebPlugin : public Plugin
 {
 public:
-
     WebPlugin();
     ~WebPlugin();
 

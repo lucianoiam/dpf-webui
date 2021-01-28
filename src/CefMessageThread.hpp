@@ -26,19 +26,16 @@ START_NAMESPACE_DISTRHO
 class CefMessageThread : public Thread
 {
 public:
-    CefMessageThread();
-    ~CefMessageThread(); 
+    CefMessageThread() : Thread("shared_cef") {};
+    ~CefMessageThread() {};
 
     void run() override;
 
-    void createBrowser(void *owner, uintptr_t parentWindowId);
+    void waitForInit();
 
-    void closeBrowser(void *owner);
-
-    static CefMessageThread& getInstance();
+    CefRefPtr<CefMain> getCefMain();
 
 private:
-
     CefRefPtr<CefMain> mMain;
 
     Signal        mCefInitSignal;
