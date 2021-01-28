@@ -2,6 +2,9 @@
  * dpf-webui
  * Copyright (C) 2021 Luciano Iam <lucianoiam@protonmail.com>
  *
+ * DISTRHO Plugin Framework (DPF)
+ * Copyright (C) 2012-2019 Filipe Coelho <falktx@falktx.com>
+ *
  * Permission to use, copy, modify, and/or distribute this software for any purpose with
  * or without fee is hereby granted, provided that the above copyright notice and this
  * permission notice appear in all copies.
@@ -14,38 +17,27 @@
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#ifndef CEF_MESSAGE_THREAD_HPP
-#define CEF_MESSAGE_THREAD_HPP
+#ifndef WEBUI_HPP
+#define WEBUI_HPP
 
-#include "extra/Thread.hpp"
-#include "extra/Mutex.hpp"
-#include "CefMain.hpp"
+#include "DistrhoUI.hpp"
 
 START_NAMESPACE_DISTRHO
 
-class CefMessageThread : public Thread
+class WebUI : public UI
 {
 public:
-    CefMessageThread();
-    ~CefMessageThread(); 
 
-    void run() override;
+    WebUI();
+    ~WebUI();
 
-    void createBrowser(void *owner, uintptr_t parentWindowId);
+    void onDisplay();
 
-    void closeBrowser(void *owner);
-
-    static CefMessageThread& getInstance();
-
-private:
-
-    CefRefPtr<CefMain> mMain;
-
-    Signal        mCefInitSignal;
-    volatile bool mCefInit;
+    void parameterChanged(uint32_t index, float value);
 
 };
 
+
 END_NAMESPACE_DISTRHO
 
-#endif // CEF_MESSAGE_THREAD_HPP
+#endif  // WEBUI_HPP

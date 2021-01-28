@@ -16,7 +16,8 @@
 
 #include "BrowserHandler.hpp"
 
-#include <iostream>
+// FIXME - clashes with CEF
+//#include <syslog.h>
 
 #include "include/cef_app.h"
 #include "include/wrapper/cef_helpers.h"
@@ -35,7 +36,7 @@ bool BrowserHandler::OnBeforePopup(CefRefPtr<CefBrowser> browser, CefRefPtr<CefF
 {
     CEF_REQUIRE_UI_THREAD();
     
-    std::cout << "BrowserHandler::OnBeforePopup()" << std::endl;
+    //syslog(LOG_INFO, "%p BrowserHandler::OnBeforePopup()", this);
 
     // Disable popups, only the main browser is allowed
     return true;
@@ -45,7 +46,7 @@ void BrowserHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser)
 {
     CEF_REQUIRE_UI_THREAD();
 
-    std::cout << "BrowserHandler::OnAfterCreated()" << std::endl;
+    //syslog(LOG_INFO, "%p BrowserHandler::OnAfterCreated()", this);
 
     // Keep browser.
     mBrowserInstance = browser;
@@ -55,14 +56,14 @@ bool BrowserHandler::DoClose(CefRefPtr<CefBrowser> browser)
 {
     CEF_REQUIRE_UI_THREAD();
 
+    //syslog(LOG_INFO, "%p BrowserHandler::DoClose()", this);
+
     // Closing the main window requires special handling. See the DoClose()
     // documentation in the CEF header for a detailed destription of this
     // process.
 
     // Allow the close. For windowed browsers this will result in the OS close
     // event being sent.
-
-    std::cout << "BrowserHandler::DoClose()" << std::endl;
 
     return false;
 }
@@ -71,7 +72,7 @@ void BrowserHandler::OnBeforeClose(CefRefPtr<CefBrowser> browser)
 {
     CEF_REQUIRE_UI_THREAD();
 
-    std::cout << "BrowserHandler::OnBeforeClose()" << std::endl;
+    //syslog(LOG_INFO, "%p BrowserHandler::OnBeforeClose()", this);
 
     // All browser windows have closed. Quit the application message loop.
     CefQuitMessageLoop();
@@ -87,5 +88,5 @@ void BrowserHandler::OnLoadError(CefRefPtr<CefBrowser> browser,
 {
     CEF_REQUIRE_UI_THREAD();
 
-    std::cout << "BrowserHandler::OnLoadError() " << errorText << std::endl;
+    //syslog(LOG_INFO, "%p BrowserHandler::OnLoadError()", this);
 }

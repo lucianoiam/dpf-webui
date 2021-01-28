@@ -16,7 +16,7 @@
 
 #include "CefMessageThread.hpp"
 
-#include <iostream>
+#include <syslog.h>
 
 #include "include/cef_app.h"
 
@@ -24,6 +24,10 @@ USE_NAMESPACE_DISTRHO
 
 CefMessageThread::CefMessageThread()
   : Thread("shared_cef")
+{
+}
+
+CefMessageThread::~CefMessageThread()
 {
 }
 
@@ -68,17 +72,17 @@ void CefMessageThread::run()
     // Run the CEF message loop. This will block until CefQuitMessageLoop() is
     // called.
 
-    std::cout << "Running CEF message loop..." << std::endl;
+    syslog(LOG_INFO, "%p Running CEF message loop...", this);
 
     CefRunMessageLoop();
     
-    std::cout << "Quit CEF message loop" << std::endl;
+    syslog(LOG_INFO, "%p Quit CEF message loop...", this);
 
     // Shut down CEF.
     CefShutdown();
 }
 
-void CefMessageThread::createBrowser(uintptr_t parentWindowId)
+void CefMessageThread::createBrowser(void *owner, uintptr_t parentWindowId)
 {
     if (!mCefInit) {
         mCefInitSignal.wait();
@@ -87,11 +91,39 @@ void CefMessageThread::createBrowser(uintptr_t parentWindowId)
     mMain->createBrowser(parentWindowId);
 }
 
-/*void CefMessageThread::closeBrowser()
+void CefMessageThread::closeBrowser(void* owner)
 {
-    // TODO -- mBrowserHandler becomes null, check memory mgmt
-    if (mMain->getBrowserHandler()) {
+    // TODO -- code and comments from earlier versions
+
+    // mBrowserHandler becomes null, check memory mgmt
+    /*if (mMain->getBrowserHandler()) {
         mMain->getBrowserHandler()->getBrowserInstance()->GetHost()->CloseBrowser(false);
-    }
+    }*/
+
+    /*
+        sCefThread.stopThread(1000);
+
+        // Since the CEF window is a child of the DPF window, need to explicity
+        // tell the browser to close. That will in turn call CefQuitMessageLoop()
+        // effectively ending the CefMessageThread
+        // https://bitbucket.org/chromiumembedded/cef/wiki/GeneralUsage#markdown-header-browser-life-span
+        //mCefThread.closeBrowser();
+
+        // Wait until CefQuitMessageLoop() is called
+        //mCefThread.stopThread(1000);
+    */
 }
-*/
+
+CefMessageThread& CefMessageThread::getInstance()
+{
+    // CEF cannot be initialized and un-inintialized multiple times during
+    // the process lifetime ( FIXME : insert link )
+
+    static CefMessageThread instance;
+
+    if (!instance.isThreadRunning()) {
+        instance.startThread();
+    }
+    
+    return instance;
+}

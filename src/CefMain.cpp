@@ -17,8 +17,6 @@
 #include "CefMain.hpp"
 #include "DistrhoPluginInfo.h"
 
-#include <string>
-
 #include "include/cef_browser.h"
 #include "include/wrapper/cef_helpers.h"
 

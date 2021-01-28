@@ -17,77 +17,47 @@
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include "DistrhoUI.hpp"
+#include "WebUI.hpp"
 #include "Window.hpp"
 #include "CefMessageThread.hpp"
 
-#include "BrowserHandler.hpp"
+#include <syslog.h>
 
-START_NAMESPACE_DISTRHO
+USE_NAMESPACE_DISTRHO
 
-class WebUI : public UI
-{
-public:
-    WebUI()
-        : UI(800, 600)
-    {
-        if (mInstances++ == 0) {
-            sCefThread.startThread();
-        }
-
-        sCefThread.createBrowser(getParentWindow().getWindowId());
-
-        // Also some hosts like REAPER recreate the parent window every time
-        // the plugin UI is opened, we might let CEF create its own window
-        // then reparent as needed -- possibly in onDisplay() ?
-    }
-
-    ~WebUI()
-    {
-        if (mInstances > 0) {
-            mInstances--;
-        
-            if (mInstances == 0) {
-                // TO DO -- cleanup browser but do not shutdown CEF as it cannot
-                //          be re-initialized (insert link)
-                //sCefThread.stopThread(1000);
-            }
-        }
-
-        // Since the CEF window is a child of the DPF window, need to explicity
-        // tell the browser to close. That will in turn call CefQuitMessageLoop()
-        // effectively ending the CefMessageThread
-        // https://bitbucket.org/chromiumembedded/cef/wiki/GeneralUsage#markdown-header-browser-life-span
-        //mCefThread.closeBrowser();
-
-        // Wait until CefQuitMessageLoop() is called
-        //mCefThread.stopThread(1000);
-    }
-
-    void onDisplay()
-    {
-        // TODO
-    }
-
-    void parameterChanged(uint32_t index, float value)
-    {
-        // unused
-        (void)index;
-        (void)value;
-    }
-
-private:
-    static CefMessageThread sCefThread;
-
-    int mInstances;
-
-};
-
-CefMessageThread WebUI::sCefThread;
-
-UI* createUI()
+UI* DISTRHO::createUI()
 {
     return new WebUI;
 }
 
-END_NAMESPACE_DISTRHO
+WebUI::WebUI()
+    : UI(800, 600)
+{
+    syslog(LOG_INFO, "%p WebUI::WebUI()", this);
+
+    // TODO : some hosts like REAPER recreate the parent window every time
+    //        the plugin UI is opened
+
+    // UI and DSP code are completely isolated, pass opaque pointer as the owner
+    uintptr_t parentWindowId = getParentWindow().getWindowId();
+    CefMessageThread::getInstance().createBrowser(this, parentWindowId);
+}
+
+WebUI::~WebUI()
+{
+    syslog(LOG_INFO, "%p WebUI::~WebUI()", this);
+
+    CefMessageThread::getInstance().closeBrowser(this);
+}
+
+void WebUI::onDisplay()
+{
+    syslog(LOG_INFO, "%p WebUI::onDisplay()", this);
+}
+
+void WebUI::parameterChanged(uint32_t index, float value)
+{
+    // unused
+    (void)index;
+    (void)value;
+}

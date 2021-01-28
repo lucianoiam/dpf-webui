@@ -17,51 +17,53 @@
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include "WebPlugin.hpp"
+#ifndef WEBPLUGIN_HPP
+#define WEBPLUGIN_HPP
 
-#include <syslog.h>
+#include "DistrhoPlugin.hpp"
 
-USE_NAMESPACE_DISTRHO
+START_NAMESPACE_DISTRHO
 
-Plugin* DISTRHO::createPlugin()
+class WebPlugin : public Plugin
 {
-    return new WebPlugin;
-}
+public:
 
-WebPlugin::WebPlugin()
-    : Plugin(0, 0, 0)
-{
-    syslog(LOG_INFO, "%p WebPlugin::WebPlugin()", this);
-}
+    WebPlugin();
+    ~WebPlugin();
 
-WebPlugin::~WebPlugin()
-{
-    syslog(LOG_INFO, "%p WebPlugin::~WebPlugin()", this);
-}
+    const char* getLabel() const
+    {
+        return "Web UI Example";
+    }
 
-void WebPlugin::initParameter(uint32_t index, Parameter& parameter)
-{
-    // unused
-    (void)index;
-    (void)parameter;
-}
+    const char* getMaker() const
+    {
+        return "Luciano Iam";
+    }
 
-float WebPlugin::getParameterValue(uint32_t index) const
-{
-    return 0;
+    const char* getLicense() const
+    {
+        return "ISC";
+    }
 
-    // unused
-    (void)index;
-}
+    uint32_t getVersion() const
+    {
+        return 0;
+    }
 
-void WebPlugin::setParameterValue(uint32_t index, float value)
-{
-    // unused
-    (void)index;
-    (void)value;
-}
+    int64_t getUniqueId() const override
+    {
+        return d_cconst('d', 'W', 'e', 'b');
+    }
 
-void WebPlugin::run(const float** inputs, float** outputs, uint32_t frames)
-{
-    memcpy(outputs[0], inputs[0], frames * sizeof(float));
-}
+    void  initParameter(uint32_t index, Parameter& parameter);
+    float getParameterValue(uint32_t index) const;
+    void  setParameterValue(uint32_t index, float value);
+
+    void run(const float** inputs, float** outputs, uint32_t frames);
+
+};
+
+END_NAMESPACE_DISTRHO
+
+#endif  // WEBPLUGIN_HPP
