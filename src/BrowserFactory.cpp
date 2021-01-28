@@ -16,52 +16,50 @@
 
 #include "BrowserFactory.hpp"
 
+#include <syslog.h>
+
 USE_NAMESPACE_DISTRHO
 
 BrowserFactory::BrowserFactory()
 {
-    // CEF cannot be initialized and un-inintialized multiple times during
-    // the process lifetime ( FIXME : insert link )
+    syslog(LOG_INFO, "%p BrowserFactory::BrowserFactory()", this);
 
+    // mCefThread initializes, shutdowns and runs CEF message loop.
+    // CEF cannot be initialized and uninintialized multiple times during the
+    // process lifetime ( FIXME : insert link )
+
+    // Single BrowserFactory is a singleton, first plugin instance inits CEF
     mCefThread.startThread();
+
+    // Block until CEF is completely initialized
+    mCefThread.waitForInit();
 }
 
 BrowserFactory::~BrowserFactory()
 {
-    mCefThread.stopThread(1000);
+    syslog(LOG_INFO, "%p BrowserFactory::~BrowserFactory()", this);
 
-    // TODO -- code and comments from earlier versions
+    // FIXME -- CefQuitMessageLoop() does not appear to do anything
+    //CefQuitMessageLoop();
 
-    // mBrowserHandler becomes null, check memory mgmt
-    /*if (mMain->getBrowserHandler()) {
-        mMain->getBrowserHandler()->getBrowserInstance()->GetHost()->CloseBrowser(false);
-    }*/
-
-    /*
-        sCefThread.stopThread(1000);
-
-        // Since the CEF window is a child of the DPF window, need to explicity
-        // tell the browser to close. That will in turn call CefQuitMessageLoop()
-        // effectively ending the CefMessageThread
-        // https://bitbucket.org/chromiumembedded/cef/wiki/GeneralUsage#markdown-header-browser-life-span
-        //mCefThread.closeBrowser();
-
-        // Wait until CefQuitMessageLoop() is called
-        //mCefThread.stopThread(1000);
-    */
+    mCefThread.stopThread(100);
 }
 
-void BrowserFactory::createBrowser(void *owner, uintptr_t parentWindowId)
+void BrowserFactory::createBrowser(uintptr_t parentWindowId)
 {
-    mCefThread.waitForInit();
+    syslog(LOG_INFO, "%p BrowserFactory::createBrowser() parentWindowId = %p",
+        this, (void*)parentWindowId);
 
-    mCefThread.getCefMain()->waitForInit();
     mCefThread.getCefMain()->createBrowser(parentWindowId);
 }
 
-void BrowserFactory::destroyBrowser(void *owner)
+void BrowserFactory::destroyBrowser(uintptr_t parentWindowId)
 {
-    // TO DO
+    syslog(LOG_INFO, "%p BrowserFactory::destroyBrowser() parentWindowId = %p",
+        this, (void*)parentWindowId);
+
+    mCefThread.getCefMain()->getBrowserHandler()->getBrowser(parentWindowId)
+        ->GetHost()->CloseBrowser(true);
 }
 
 BrowserFactory& BrowserFactory::getInstance()

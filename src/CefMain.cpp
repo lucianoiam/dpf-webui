@@ -49,9 +49,13 @@ void CefMain::createBrowser(uintptr_t parentWindowId)
     window_info.SetAsPopup(NULL, DISTRHO_PLUGIN_NAME);
 #endif
 
+    // Passing context data is only useful for the render process handler,
+    // the browser process handler cannot read it
+    mBrowserHandler->setNextParentWindowId(parentWindowId);
+
     // Create the browser window.
-    CefBrowserHost::CreateBrowser(window_info, mBrowserHandler, url, browser_settings,
-                                nullptr, nullptr);
+    CefBrowserHost::CreateBrowser(window_info, mBrowserHandler, url,
+                                    browser_settings, nullptr, nullptr);
 }
 
 void CefMain::OnContextInitialized()

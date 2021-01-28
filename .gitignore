@@ -1,4 +1,7 @@
 build
 bin
 lib/cef
+
 local
+nohup.out
+

@@ -27,8 +27,8 @@ public:
     BrowserFactory();
     ~BrowserFactory();
 
-    void createBrowser(void *owner, uintptr_t parentWindowId);
-    void destroyBrowser(void *owner);
+    void createBrowser(uintptr_t parentWindowId);
+    void destroyBrowser(uintptr_t parentWindowId);
 
     static BrowserFactory& getInstance();
 

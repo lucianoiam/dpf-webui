@@ -40,14 +40,15 @@ WebUI::WebUI()
 
     // UI and DSP code are completely isolated, pass opaque pointer as the owner
     uintptr_t parentWindowId = getParentWindow().getWindowId();
-    BrowserFactory::getInstance().createBrowser(this, parentWindowId);
+    BrowserFactory::getInstance().createBrowser(parentWindowId);
 }
 
 WebUI::~WebUI()
 {
     syslog(LOG_INFO, "%p WebUI::~WebUI()", this);
 
-    BrowserFactory::getInstance().destroyBrowser(this);
+    uintptr_t parentWindowId = getParentWindow().getWindowId();
+    BrowserFactory::getInstance().destroyBrowser(parentWindowId);
 }
 
 void WebUI::onDisplay()

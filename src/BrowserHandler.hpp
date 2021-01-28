@@ -20,6 +20,8 @@
 #include "DistrhoUI.hpp"
 #include "include/cef_client.h"
 
+#include <list>
+
 START_NAMESPACE_DISTRHO
 
 class BrowserHandler : public CefClient,
@@ -31,11 +33,13 @@ public:
     explicit BrowserHandler() {};
     ~BrowserHandler() {};
 
-    CefRefPtr<CefBrowser> getBrowserInstance()
-    {
-        return mBrowserInstance;
-    }
+    CefRefPtr<CefBrowser> getBrowser(uintptr_t parentWindowId);
 
+    void setNextParentWindowId(uintptr_t parentWindowId)
+    {
+        mNextParentWindowId = parentWindowId;
+    }
+    
     // CefClient methods:
     virtual CefRefPtr<CefDisplayHandler> GetDisplayHandler() OVERRIDE
     {
@@ -53,7 +57,19 @@ public:
     }
 
     // CefLifeSpanHandler methods:
-    virtual bool OnBeforePopup(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, const CefString& target_url, const CefString& target_frame_name, CefLifeSpanHandler::WindowOpenDisposition target_disposition, bool user_gesture, const CefPopupFeatures& popupFeatures, CefWindowInfo& windowInfo, CefRefPtr<CefClient>& client, CefBrowserSettings& settings, CefRefPtr<CefDictionaryValue>& extra_info, bool* no_javascript_access) OVERRIDE;
+    virtual bool OnBeforePopup(CefRefPtr<CefBrowser> browser,
+        CefRefPtr<CefFrame> frame,
+        const CefString& target_url,
+        const CefString& target_frame_name,
+        CefLifeSpanHandler::WindowOpenDisposition target_disposition,
+        bool user_gesture,
+        const CefPopupFeatures& popupFeatures,
+        CefWindowInfo& windowInfo,
+        CefRefPtr<CefClient>& client,
+        CefBrowserSettings& settings,
+        CefRefPtr<CefDictionaryValue>& extra_info,
+        bool* no_javascript_access) OVERRIDE;
+    
     virtual void OnAfterCreated(CefRefPtr<CefBrowser> browser) OVERRIDE;
     virtual bool DoClose(CefRefPtr<CefBrowser> browser) OVERRIDE;
     virtual void OnBeforeClose(CefRefPtr<CefBrowser> browser) OVERRIDE;
@@ -66,8 +82,11 @@ public:
                                const CefString& failedUrl) OVERRIDE;
     
 private:
-    // Existing browser windows. Only accessed on the CEF UI thread.
-    CefRefPtr<CefBrowser> mBrowserInstance;
+    // Map of existing browser windows. Only accessed on the CEF UI thread.
+    typedef std::map<uintptr_t, CefRefPtr<CefBrowser>> BrowserMap;
+    BrowserMap mBrowserMap;
+
+    uintptr_t mNextParentWindowId;
 
     // Include the default reference counting implementation.
     IMPLEMENT_REFCOUNTING(BrowserHandler);

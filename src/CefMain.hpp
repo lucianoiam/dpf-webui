@@ -31,17 +31,17 @@ class CefMain : public CefApp, public CefBrowserProcessHandler
 public:
     CefMain() {};
 
+    void waitForInit();
+    void createBrowser(uintptr_t parentWindowId);
+    
     CefRefPtr<BrowserHandler> getBrowserHandler()
     {
         return mBrowserHandler;
     }
 
-    void waitForInit();
-
-    void createBrowser(uintptr_t parentWindowId);
-    
     // CefApp methods:
-    virtual CefRefPtr<CefBrowserProcessHandler> GetBrowserProcessHandler() OVERRIDE
+    virtual CefRefPtr<CefBrowserProcessHandler> GetBrowserProcessHandler()
+        OVERRIDE
     {
         return this;
     }

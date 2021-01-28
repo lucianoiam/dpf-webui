@@ -19,12 +19,30 @@
 // FIXME - clashes with CEF
 //#include <syslog.h>
 
+#include <iostream>
+
 #include "include/cef_app.h"
 #include "include/wrapper/cef_helpers.h"
 
 USE_NAMESPACE_DISTRHO
 
-bool BrowserHandler::OnBeforePopup(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, const CefString& target_url, const CefString& target_frame_name, CefLifeSpanHandler::WindowOpenDisposition target_disposition, bool user_gesture, const CefPopupFeatures& popupFeatures, CefWindowInfo& windowInfo, CefRefPtr<CefClient>& client, CefBrowserSettings& settings, CefRefPtr<CefDictionaryValue>& extra_info, bool* no_javascript_access)
+CefRefPtr<CefBrowser> BrowserHandler::getBrowser(uintptr_t parentWindowId)
+{
+    return mBrowserMap[parentWindowId];
+}
+
+bool BrowserHandler::OnBeforePopup(CefRefPtr<CefBrowser> browser,
+    CefRefPtr<CefFrame> frame,
+    const CefString& target_url,
+    const CefString& target_frame_name,
+    CefLifeSpanHandler::WindowOpenDisposition target_disposition,
+    bool user_gesture,
+    const CefPopupFeatures& popupFeatures,
+    CefWindowInfo& windowInfo,
+    CefRefPtr<CefClient>& client,
+    CefBrowserSettings& settings,
+    CefRefPtr<CefDictionaryValue>& extra_info,
+    bool* no_javascript_access)
 {
     CEF_REQUIRE_UI_THREAD();
     
@@ -40,8 +58,8 @@ void BrowserHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser)
 
     //syslog(LOG_INFO, "%p BrowserHandler::OnAfterCreated()", this);
 
-    // Keep browser.
-    mBrowserInstance = browser;
+    // Add to the map of existing browsers.
+    mBrowserMap.emplace(mNextParentWindowId, browser);
 }
 
 bool BrowserHandler::DoClose(CefRefPtr<CefBrowser> browser)
@@ -66,10 +84,14 @@ void BrowserHandler::OnBeforeClose(CefRefPtr<CefBrowser> browser)
 
     //syslog(LOG_INFO, "%p BrowserHandler::OnBeforeClose()", this);
 
-    // All browser windows have closed. Quit the application message loop.
-    CefQuitMessageLoop();
-
-    mBrowserInstance = nullptr;
+    // Remove from the map of existing browsers.
+    BrowserMap::iterator bit = mBrowserMap.begin();
+    for (; bit != mBrowserMap.end(); ++bit) {
+        if (bit->second->IsSame(browser)) {
+            mBrowserMap.erase(bit);
+            break;
+        }
+    }
 }
 
 void BrowserHandler::OnLoadError(CefRefPtr<CefBrowser> browser,

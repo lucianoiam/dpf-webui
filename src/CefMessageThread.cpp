@@ -44,8 +44,10 @@ void CefMessageThread::run()
     settings.no_sandbox = true;
     //settings.log_severity = LOGSEVERITY_DEBUG;
 
-    CefString(&settings.browser_subprocess_path).FromASCII("/home/user/src/dpf-webui/lib/cef/build/tests/cefsimple/Release/cefsimple");
-    CefString(&settings.resources_dir_path).FromASCII("/home/user/src/dpf-webui/lib/cef/Resources");
+    CefString(&settings.browser_subprocess_path).FromASCII(
+        "/home/user/src/dpf-webui/lib/cef/build/tests/cefsimple/Release/cefsimple");
+    CefString(&settings.resources_dir_path).FromASCII(
+        "/home/user/src/dpf-webui/lib/cef/Resources");
 
     // CefMain implements application-level callbacks for the browser process.
     // It will create the first browser instance in OnContextInitialized() after
@@ -65,7 +67,11 @@ void CefMessageThread::run()
 
     syslog(LOG_INFO, "%p Running CEF message loop...", this);
 
-    CefRunMessageLoop();
+    while (!shouldThreadExit()) {
+        CefDoMessageLoopWork();
+        usleep(10000);
+    }
+    //CefRunMessageLoop();
     
     syslog(LOG_INFO, "%p Quit CEF message loop...", this);
 
@@ -75,9 +81,13 @@ void CefMessageThread::run()
 
 void CefMessageThread::waitForInit()
 {
+    // Block until CefInitialize() is called
     if (!mCefInit) {
         mCefInitSignal.wait();
     }
+
+    // Block until CefApp::OnContextInitialized() is called
+    mMain->waitForInit();
 }
 
 CefRefPtr<CefMain> CefMessageThread::getCefMain()
