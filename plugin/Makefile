@@ -38,6 +38,16 @@ include $(DPF_CUSTOM_PATH)/Makefile.plugins.mk
 BASE_FLAGS += -Isrc
 
 # --------------------------------------------------------------
+# DPF graphics library
+
+dpf_dgl_cairo: $(DPF_CUSTOM_PATH)/build/libdgl-cairo.a
+
+$(DPF_CUSTOM_PATH)/build/libdgl-cairo.a:
+	cd $(DPF_CUSTOM_PATH) && make dgl
+
+TARGETS += dpf_dgl_cairo
+
+# --------------------------------------------------------------
 # Enable all possible plugin types
 
 ifeq ($(HAVE_JACK),true)
