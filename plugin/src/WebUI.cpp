@@ -19,7 +19,7 @@
 
 #include "WebUI.hpp"
 #include "Window.hpp"
-#include "BrowserFactory.hpp"
+//#include "BrowserFactory.hpp"
 
 #include <syslog.h>
 
@@ -39,16 +39,16 @@ WebUI::WebUI()
     //        the plugin UI is opened
 
     // UI and DSP code are completely isolated, pass opaque pointer as the owner
-    uintptr_t parentWindowId = getParentWindow().getWindowId();
-    BrowserFactory::getInstance().createBrowser(parentWindowId);
+    //uintptr_t parentWindowId = getParentWindow().getWindowId();
+    //BrowserFactory::getInstance().createBrowser(parentWindowId);
 }
 
 WebUI::~WebUI()
 {
     syslog(LOG_INFO, "%p WebUI::~WebUI()", this);
 
-    uintptr_t parentWindowId = getParentWindow().getWindowId();
-    BrowserFactory::getInstance().destroyBrowser(parentWindowId);
+    //uintptr_t parentWindowId = getParentWindow().getWindowId();
+    //BrowserFactory::getInstance().destroyBrowser(parentWindowId);
 }
 
 void WebUI::onDisplay()
